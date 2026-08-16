@@ -6,7 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "noaa-inquiries"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = "2dbc54b2-282f-43f3-ab3d-94ed654ebe80"
 
 [vars]
 CONTACT_FROM_ADDRESS = "onboarding@resend.dev"
