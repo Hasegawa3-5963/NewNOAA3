@@ -2,7 +2,7 @@ backend:
   name: github
   repo: Hasegawa3-5963/NewNOAA3
   branch: main
-  base_url: https://REPLACE_WITH_YOUR_SITE_DOMAIN
+  base_url: https://newnoaa3.pages.dev
   auth_endpoint: api/auth
 
 media_folder: "assets/news"
