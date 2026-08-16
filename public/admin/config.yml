@@ -35,7 +35,7 @@ collections:
     files:
       - name: "voices"
         label: "ユーザーの声一覧"
-        file: "content/voices.json"
+        file: "public/content/voices.json"
         fields:
           - { name: "items", label: "声", widget: "list", label_singular: "声1件", fields: [
               { name: "date", label: "日付", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false },
