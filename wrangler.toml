@@ -10,4 +10,4 @@ database_id = "2dbc54b2-282f-43f3-ab3d-94ed654ebe80"
 
 [vars]
 CONTACT_FROM_ADDRESS = "onboarding@resend.dev"
-CONTACT_TO_ADDRESS = "info@noaa.jp"
+CONTACT_TO_ADDRESS = "hasegawa@noaa.jp"
