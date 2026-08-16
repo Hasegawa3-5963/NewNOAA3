@@ -22,6 +22,7 @@ collections:
               { name: "date", label: "日付", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false },
               { name: "category", label: "カテゴリ", widget: "select", options: ["お知らせ", "告知", "導入", "メディア"], default: "お知らせ" },
               { name: "image", label: "カバー画像", widget: "image" },
+              { name: "link", label: "リンク先（既存の個別ページがある場合のみ。新規記事は空欄でOK）", widget: "string", required: false },
               { name: "body", label: "本文", widget: "markdown" },
               { name: "order", label: "表示順（TOP画面に固定したい時だけ数値を入力。空欄なら新着順）", widget: "number", required: false, value_type: "int" },
               { name: "status", label: "公開状態", widget: "select", options: [
