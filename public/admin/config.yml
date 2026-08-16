@@ -14,7 +14,7 @@ collections:
     files:
       - name: "news"
         label: "お知らせ一覧"
-        file: "content/news.json"
+        file: "public/content/news.json"
         fields:
           - { name: "items", label: "お知らせ", widget: "list", label_singular: "お知らせ1件", summary: "{{title}} — {{date}}", fields: [
               { name: "id", label: "ID（自動採番。空欄でOK）", widget: "string", required: false },
