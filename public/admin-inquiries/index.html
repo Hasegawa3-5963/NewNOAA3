@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>お問い合わせ管理｜NOAA</title>
+<link rel="stylesheet" href="/styles.css">
+<style>
+  body{background:var(--cream)}
+  .admin-wrap{max-width:1000px;margin:0 auto;padding:48px 24px}
+  .login-box{max-width:360px;margin:120px auto;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:32px}
+  .login-box input{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;margin-bottom:14px}
+  .login-box button{width:100%;background:var(--blue-dark);color:#fff;border:none;border-radius:12px;padding:12px;font-weight:700}
+  #login-error{color:var(--orange);font-size:13px;display:none}
+  table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+  th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
+  th{background:var(--surface-1);font-size:12px;color:var(--muted)}
+  select{padding:6px 8px;border-radius:8px;border:1px solid var(--line)}
+  textarea{width:100%;min-height:50px;padding:6px 8px;border-radius:8px;border:1px solid var(--line);font:inherit}
+  .save-btn{background:var(--blue-dark);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:13px;margin-top:6px;cursor:pointer}
+  .status-new{color:var(--orange);font-weight:700}
+  .status-responded{color:#2f9e4f;font-weight:700}
+</style>
+</head><body>
+
+<div id="login-view" class="login-box">
+  <h2 style="margin-bottom:20px">管理画面ログイン</h2>
+  <input type="password" id="password" placeholder="パスワード">
+  <button id="login-btn">ログイン</button>
+  <p id="login-error">パスワードが違います</p>
+</div>
+
+<div id="admin-view" class="admin-wrap" style="display:none">
+  <h1 style="margin-bottom:24px">お問い合わせ一覧</h1>
+  <div id="table-wrap"><p>読み込み中…</p></div>
+</div>
+
+<script>
+var loginView = document.getElementById('login-view');
+var adminView = document.getElementById('admin-view');
+
+document.getElementById('login-btn').addEventListener('click', function(){
+  var password = document.getElementById('password').value;
+  fetch('/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: password })
+  })
+  .then(function(r){
+    if (!r.ok) throw new Error('unauthorized');
+    return r.json();
+  })
+  .then(function(){
+    loginView.style.display = 'none';
+    adminView.style.display = 'block';
+    loadInquiries();
+  })
+  .catch(function(){
+    document.getElementById('login-error').style.display = 'block';
+  });
+});
+
+function loadInquiries() {
+  fetch('/api/inquiries')
+    .then(function(r){
+      if (!r.ok) throw new Error('unauthorized');
+      return r.json();
+    })
+    .then(function(data){ renderTable(data.items || []); })
+    .catch(function(){
+      loginView.style.display = 'block';
+      adminView.style.display = 'none';
+    });
+}
+
+function renderTable(items) {
+  if (!items.length) {
+    document.getElementById('table-wrap').innerHTML = '<p>お問い合わせはまだありません。</p>';
+    return;
+  }
+  var rows = items.map(function(item){
+    return '<tr data-id="' + item.id + '">'
+      + '<td>' + item.created_at.replace('T', ' ').slice(0, 16) + '</td>'
+      + '<td>' + item.name + '<br><small>' + item.email + '</small><br><small>' + (item.tel || '') + '</small></td>'
+      + '<td>' + item.region + '</td>'
+      + '<td style="max-width:260px;white-space:pre-wrap">' + item.message + '</td>'
+      + '<td>'
+        + '<select class="status-select">'
+          + '<option value="new"' + (item.status === 'new' ? ' selected' : '') + '>未対応</option>'
+          + '<option value="responded"' + (item.status === 'responded' ? ' selected' : '') + '>対応済み</option>'
+          + '<option value="closed"' + (item.status === 'closed' ? ' selected' : '') + '>クローズ</option>'
+        + '</select>'
+        + '<textarea class="note-input" placeholder="メモ">' + (item.note || '') + '</textarea>'
+        + '<button class="save-btn">保存</button>'
+      + '</td>'
+    + '</tr>';
+  }).join('');
+
+  document.getElementById('table-wrap').innerHTML =
+    '<table><thead><tr><th>日時</th><th>氏名／連絡先</th><th>地域</th><th>メッセージ</th><th>ステータス</th></tr></thead><tbody>' + rows + '</tbody></table>';
+
+  document.querySelectorAll('.save-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var tr = btn.closest('tr');
+      var id = tr.getAttribute('data-id');
+      var status = tr.querySelector('.status-select').value;
+      var note = tr.querySelector('.note-input').value;
+      btn.textContent = '保存中…';
+      fetch('/api/inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: id, status: status, note: note })
+      })
+      .then(function(){ btn.textContent = '保存しました'; setTimeout(function(){ btn.textContent = '保存'; }, 1500); })
+      .catch(function(){ btn.textContent = '失敗しました'; });
+    });
+  });
+}
+
+// 既にログイン済みなら自動で一覧を試みる
+loadInquiries();
+</script>
+</body></html>
