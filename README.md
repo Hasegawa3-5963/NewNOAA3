@@ -11,6 +11,7 @@ LUCEのランディングページは、この本体サイトとは独立に `lp
 - `functions/api/contact.js` お問い合わせフォームの送信を受け取り、メール通知を送るPages Function（今回追加）
 - `wrangler.toml` Cloudflareへの設定ファイル（今回追加）
 
+
 ## 1. Cloudflare Pagesでの設定
 - ビルドコマンド：空欄のままでOK
 - ビルド出力ディレクトリ：`public`
