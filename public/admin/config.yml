@@ -1,0 +1,43 @@
+backend:
+  name: github
+  repo: YOUR_GITHUB_USERNAME/YOUR_REPO_NAME
+  branch: main
+  base_url: https://YOUR_OAUTH_WORKER.example.workers.dev
+
+media_folder: "assets/news"
+public_folder: "/assets/news"
+
+collections:
+  - name: "news"
+    label: "お知らせ"
+    files:
+      - name: "news"
+        label: "お知らせ一覧"
+        file: "content/news.json"
+        fields:
+          - { name: "items", label: "お知らせ", widget: "list", label_singular: "お知らせ1件", summary: "{{title}} — {{date}}", fields: [
+              { name: "id", label: "ID（自動採番。空欄でOK）", widget: "string", required: false },
+              { name: "title", label: "タイトル", widget: "string" },
+              { name: "date", label: "日付", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false },
+              { name: "category", label: "カテゴリ", widget: "select", options: ["お知らせ", "告知", "導入", "メディア"], default: "お知らせ" },
+              { name: "image", label: "カバー画像", widget: "image" },
+              { name: "body", label: "本文", widget: "markdown" },
+              { name: "order", label: "表示順（TOP画面に固定したい時だけ数値を入力。空欄なら新着順）", widget: "number", required: false, value_type: "int" },
+              { name: "status", label: "公開状態", widget: "select", options: [
+                  { label: "公開", value: "published" },
+                  { label: "非公開", value: "hidden" },
+                ], default: "published" },
+            ] }
+
+  - name: "voices"
+    label: "ユーザーの声"
+    files:
+      - name: "voices"
+        label: "ユーザーの声一覧"
+        file: "content/voices.json"
+        fields:
+          - { name: "items", label: "声", widget: "list", label_singular: "声1件", fields: [
+              { name: "date", label: "日付", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false },
+              { name: "name", label: "投稿者（属性など）", widget: "string" },
+              { name: "body", label: "内容", widget: "text" },
+            ] }
