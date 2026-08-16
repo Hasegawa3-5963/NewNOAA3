@@ -16,3 +16,4 @@ export async function onRequestGet(context) {
 
   return Response.redirect(authorizeUrl, 302);
 }
+
