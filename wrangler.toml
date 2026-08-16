@@ -3,6 +3,11 @@ pages_build_output_dir = "public"
 compatibility_date = "2024-09-23"
 compatibility_flags = ["nodejs_compat"]
 
+[[d1_databases]]
+binding = "DB"
+database_name = "noaa-inquiries"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
 [vars]
-CONTACT_FROM_ADDRESS = "noreply@noaa.jp"
+CONTACT_FROM_ADDRESS = "onboarding@resend.dev"
 CONTACT_TO_ADDRESS = "info@noaa.jp"
